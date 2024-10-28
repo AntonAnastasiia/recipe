@@ -9,10 +9,8 @@ Author: Anton Anastasiia
 if (!defined('ABSPATH')) {
     exit; 
 }
-// Основний клас плагіну
 class My_Recipe_Plugin {
     
-    // Конструктор класу
     public function __construct() {
         add_action('init', [$this, 'register_recipe_post_type']);
         add_action('add_meta_boxes', [$this, 'add_recipe_metaboxes']);
@@ -24,7 +22,7 @@ class My_Recipe_Plugin {
         wp_enqueue_style('style', plugin_dir_url(__FILE__) . 'css/style.css');
     }
 
-    // Реєстрація нового типу запису "Рецепти"
+
     public function register_recipe_post_type() {
         $labels = [
             'name' => 'Рецепти',
@@ -53,7 +51,6 @@ class My_Recipe_Plugin {
         register_post_type('recipe', $args);
     }
 
-    // Додавання метабоксів для додаткових полів
     public function add_recipe_metaboxes() {
         add_meta_box(
             'recipe_details',
@@ -65,9 +62,7 @@ class My_Recipe_Plugin {
         );
     }
 
-    // Виведення метабоксу з додатковими полями
     public function render_recipe_metabox($post) {
-        // Отримання збережених значень метаданих
         $ingredients = get_post_meta($post->ID, 'recipe_ingredients', true);
         $cooking_time = get_post_meta($post->ID, 'recipe_cooking_time', true);
         $servings = get_post_meta($post->ID, 'recipe_servings', true);
@@ -84,7 +79,6 @@ class My_Recipe_Plugin {
         <?php
     }
 
-    // Збереження метаданих при збереженні посту
     public function save_recipe_metadata($post_id) {
         if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
             return;
@@ -94,7 +88,6 @@ class My_Recipe_Plugin {
             return;
         }
 
-        // Збереження даних
         if (isset($_POST['recipe_ingredients'])) {
             update_post_meta($post_id, 'recipe_ingredients', sanitize_textarea_field($_POST['recipe_ingredients']));
         }
@@ -109,10 +102,8 @@ class My_Recipe_Plugin {
     }
 }
 
-// Ініціалізація плагіну
 new My_Recipe_Plugin();
 
-// Функція для підключення шаблону з плагіна
 function my_recipe_plugin_template($template) {
     if (is_singular('recipe')) {
         // Шлях до шаблону в папці плагіна
